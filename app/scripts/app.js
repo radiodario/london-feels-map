@@ -20,7 +20,7 @@ this.socket = io(url);
 
 var avgFormat = d3.format(".2f");
 var color = d3.scale.linear()
-   .domain([-10,10])  // min/max of data
+   .domain([-11,11])  // min/max of data
    .range(["rgb(250, 20, 100)", "rgb(30, 120, 250)"])
    .interpolate(d3.interpolateHcl);
 

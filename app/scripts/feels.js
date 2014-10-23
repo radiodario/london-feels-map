@@ -1,5 +1,6 @@
 module.exports = {
-  '-10': 'like suicide is the only option',
+  '-11': 'like suicide is the only option',
+  '-10': 'the end coming',
   '-9' : 'Terrible',
   '-8' : 'OH GOD WHY',
   '-7' : 'Snow day',
@@ -19,5 +20,6 @@ module.exports = {
   '7'  : 'Incredible',
   '8'  : 'Ecstatic',
   '9'  : 'Like a boss',
-  '10' : 'Nirvana'
+  '10' : 'Nirvana',
+  '11' : 'something no words can describe',
 }
