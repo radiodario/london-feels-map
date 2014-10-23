@@ -2,7 +2,7 @@
   <div class="tweet-header">
     <a href="http://twitter.com/<%= user.screen_name %>" target="_blank">
       <img class="user-pic" src="<%= user.profile_image_url_https %>"/>
-      <span class="username"><%= user.name %></span>
+      <span class="username"><%= user.name %></span> feels <span class="feels" style="color:<%= color %>;"><%= feels %></span>
     </a>
   </div>
   <div class="tweet-body"><%= text %></div>

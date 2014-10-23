@@ -21,6 +21,7 @@ h1 {
 
 .tweet {
     margin-left: 58px;
+    min-height: 50px;
 
     .tweet-header {
 
@@ -34,6 +35,10 @@ h1 {
             }
 
             span.username {
+                font-weight: bold;
+            }
+
+            span.feels {
                 font-weight: bold;
             }
 
@@ -58,22 +63,49 @@ h1 {
 }
 
 
+.lastUpdated {
+    margin-top: 3px;
+    float: right;
+}
+
+.controls {
+
+    @media (min-width: 768px) {
+        padding: 5px 32px;
+    }
+
+    label {
+        font-size: 0.75em;
+    }
+
+
+    padding: 5px;
+    background-color: #333;
+    color: white;
+
+}
+
+h1 {
+    margin-top: 0.7em;
+    margin-bottom: 0.3em;
+}
+
 .tiny {
-    font-size: 0.4em;
+    font-size: 0.75em;
 }
 
 
 .footer {
-    height: 60px;
-    margin-left: 1em;
+    margin-left: 32px;
     .tagline {
-        margin-top: 45px;
-        margin-left: 58px;
-        font-size: 0.9em;
+        margin-top: 42px;
+        margin-left: 70px;
+        color: #555;
+        font-size: 0.89em;
         img {
             float: left;
             margin-left: -58px;
-            margin-top: -34px;
+            margin-top: -18px;
             height: 48px;
             width: 48px;
         }

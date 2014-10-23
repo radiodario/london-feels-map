@@ -7,6 +7,9 @@ var d3 = require('d3');
 var feels = require('./feels');
 var tweetTemplate = require('./ui/tweet.html');
 
+var londonStatus = document.querySelector('span.feeling');
+var lastUpdated = document.querySelector('span.lastUpdated');
+
 var L = require('leaflet');
 
 L.Icon.Default.imagePath = '/images/';
@@ -26,7 +29,14 @@ var mapCont = document.querySelector('#map');
 
 function resizeMap () {
 
-  mapCont.style.height = ((window.innerHeight * 0.8) | 0) + "px";
+  var height
+  if (window.innerWidth > 768) {
+    height = ((window.innerHeight * 0.8) | 0) + "px";
+  } else {
+    height = ((window.innerHeight * 0.7) | 0) + "px";
+  }
+
+  mapCont.style.height = height;
   mapCont.style.width = "100%"
 
 }
@@ -65,18 +75,38 @@ d3.json(url+'/latest', function(error, tweets) {
   if (error) {
     return console.error('error grabbing latest tweets:', error);
   }
-  tweets.map(drawPoint);
+
+  console.log("loaded", tweets.length, "tweets")
+
+  var i = 0;
+  d3.timer(function(d) {
+    drawPoint(tweets[i], true);
+
+    return !(++i < tweets.length);
+
+  }, 10)
+
+  // tweets.map(drawPoint);
+
 })
 
+var follow = document.querySelector('input#follow');
 
 
-this.socket.on('tweet', drawPoint);
+this.socket.on('tweet', function(tweet) {
+
+  var hidePopup = !follow.checked;
+
+
+
+  drawPoint(tweet, hidePopup);
+});
 
 var tweets = [];
 
-var time_fmt = "HH:mm - D MMM YYYY";
+var time_fmt = "HH:mm:ss - D MMM YYYY";
 
-function drawPoint (tweet) {
+function drawPoint (tweet, hidePopup) {
 
   if (!tweet.coordinates) {
     return;
@@ -87,7 +117,9 @@ function drawPoint (tweet) {
 
   var col = color(tweet.sentiment.score);
 
-  var circle = L.circle(pos, circleRadius, {
+  var factor = 5;
+
+  var circle = L.circle(pos, circleRadius * factor, {
     color: col,
     weight: 2,
     opacity: 1,
@@ -95,8 +127,22 @@ function drawPoint (tweet) {
     fillOpacity: 0.85
   })
 
+  d3.timer(function() {
+    circle.setRadius(circleRadius * factor)
+    factor -= 0.1;
+
+    return (factor <= 1)
+
+  });
+
 
   tweet.created_human = moment(tweet.created_at).format(time_fmt)
+
+  lastUpdated.innerHTML = "" + tweet.created_human;
+
+  tweet.feels = feels[Math.floor(tweet.sentiment.score)] || "average";
+  tweet.feels = tweet.feels.toLowerCase();
+  tweet.color = col
 
   var popupContent = tweetTemplate(tweet);
 
@@ -104,13 +150,16 @@ function drawPoint (tweet) {
 
   circle.addTo(map);
 
-  tweet.circle = circle;
+  if (!hidePopup && map.getBounds().contains(pos)) {
+    circle.openPopup();
+  }
 
+  tweet.circle = circle;
   tweets.push(tweet);
 
   removeOldTweets();
-
   calculateFeels();
+
 }
 
 function removeOldTweets() {
@@ -132,7 +181,7 @@ function removeOldTweets() {
 
 }
 
-var londonStatus = document.querySelector('span.feeling');
+
 
 function calculateFeels () {
 
