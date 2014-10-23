@@ -1,10 +1,10 @@
 <div class="tweet">
   <div class="tweet-header">
     <a href="http://twitter.com/<%= user.screen_name %>" target="_blank">
-      <img class="user-pic" src="<%= user.profile_image_url %>"/>
+      <img class="user-pic" src="<%= user.profile_image_url_https %>"/>
       <span class="username"><%= user.name %></span>
     </a>
   </div>
   <div class="tweet-body"><%= text %></div>
-  <div class="tweet-footer"><%= place.name %></div>
+  <div class="tweet-footer"><%= place.name %> - <%= created_human %></div>
 </div>

@@ -1,18 +1,21 @@
 /** @jsx React.DOM */
 
 var React = window.React = require('react');
-
+var moment = require('moment');
 var io = require('socket.io-client')
 var d3 = require('d3');
-
+var feels = require('./feels');
 var tweetTemplate = require('./ui/tweet.html');
 
 var L = require('leaflet');
 
 L.Icon.Default.imagePath = '/images/';
 
-this.socket = io("http://localhost:3080");
+var url = "";// "http://localhost:3080";
 
+this.socket = io(url);
+
+var avgFormat = d3.format(".2f");
 var color = d3.scale.linear()
    .domain([-10,10])  // min/max of data
    .range(["rgb(250, 20, 100)", "rgb(30, 120, 250)"])
@@ -34,7 +37,7 @@ window.addEventListener('resize', resizeMap)
 
 
 var map = L.map('map');
-map.setView([51.502, -0.08], 12);
+map.setView([51.502, -0.08], 13);
 
 var mapSource = "//stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
 
@@ -48,16 +51,28 @@ L.tileLayer(mapSource, {
 // add a marker in the given location, attach some popup content to it and open the popup
 
 
+
+d3.json(url+'/latest', function(error, tweets) {
+  if (error) {
+    return console.error('error grabbing latest tweets:', error);
+  }
+  tweets.map(drawPoint);
+})
+
+
+
 this.socket.on('tweet', drawPoint);
 
+var tweets = [];
 
-
+var time_fmt = "HH:mm - D MMM YYYY";
 
 function drawPoint (tweet) {
 
   if (!tweet.coordinates) {
     return;
   }
+
   // the coordinates need reversing - terrible names.
   var pos = tweet.coordinates.coordinates.reverse();
 
@@ -71,13 +86,64 @@ function drawPoint (tweet) {
     fillOpacity: 0.85
   })
 
+
+  tweet.created_human = moment(tweet.created_at).format(time_fmt)
+
   var popupContent = tweetTemplate(tweet);
 
   circle.bindPopup(popupContent)
 
   circle.addTo(map);
-  // circle.openPopup()
 
+  tweet.circle = circle;
+
+  tweets.push(tweet);
+
+  removeOldTweets();
+
+  calculateFeels();
+}
+
+function removeOldTweets() {
+  // 10 minutes
+  var limit = new Date().getTime() - (60 * 60 * 1000);
+
+  function getTimestamp(tweet) {
+    return new Date(tweet.created_at).getTime();
+  }
+
+  var i, t;
+
+  for (i = 0; getTimestamp(tweets[i]) < limit; i++) {
+    t = tweets[i];
+    map.removeLayer(t.circle);
+  }
+
+  tweets.splice(0, i-1);
+
+}
+
+var londonStatus = document.querySelector('span.feeling');
+
+function calculateFeels () {
+
+  var sum = 0;
+
+  var i, l, t;
+  for (i = 0, l = tweets.length; i < l; i++) {
+    t = tweets[i];
+    sum += t.sentiment.score;
+  }
+
+  avg = sum/tweets.length;
+
+  var feel = feels[Math.floor(avg)];
+
+
+
+  londonStatus.innerHTML = feel + ' <span class="tiny">(' + avgFormat(avg) +")</tiny>";
+
+  londonStatus.style.color = color(avg);
 
 }
 

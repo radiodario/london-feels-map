@@ -6,7 +6,8 @@
     "d3": "^3.4.13",
     "leaflet": "^0.7.3",
     "browserify-ejs": "0.0.2",
-    "leaflet-providers": "^1.0.10"
+    "leaflet-providers": "^1.0.10",
+    "moment": "^2.8.3"
   },
   "devDependencies": {
     "gulp": "~3.5.0",
