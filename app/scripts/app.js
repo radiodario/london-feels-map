@@ -37,7 +37,16 @@ window.addEventListener('resize', resizeMap)
 
 
 var map = L.map('map');
-map.setView([51.502, -0.08], 13);
+
+var initialZoomLevel = 13;
+var circleRadius = 50;
+
+if (window.innerWidth < 768) {
+  initialZoomLevel = 11;
+  circleRadius = 60;
+}
+
+map.setView([51.502, -0.08], initialZoomLevel);
 
 var mapSource = "//stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png"
 
@@ -78,7 +87,7 @@ function drawPoint (tweet) {
 
   var col = color(tweet.sentiment.score);
 
-  var circle = L.circle(pos, 40, {
+  var circle = L.circle(pos, circleRadius, {
     color: col,
     weight: 2,
     opacity: 1,
