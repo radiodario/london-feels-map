@@ -5,6 +5,12 @@
       <span class="username"><%= user.name %></span> feels <span class="feels" style="color:<%= color %>;"><%= feels %></span>
     </a>
   </div>
-  <div class="tweet-body"><%= text %></div>
-  <div class="tweet-footer"><%= place.name %> - <%= created_human %></div>
+  <div class="tweet-body">
+    <a class="tweet-link" href="http://twitter.com/<%= user.screen_name %>/status/<%= id_str %>" target="_blank">
+      <%= text %>
+    </a>
+  </div>
+  <div class="tweet-footer">
+    <%= place.name %> - <%= created_human %>
+  </div>
 </div>

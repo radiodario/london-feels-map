@@ -132,9 +132,7 @@ function drawPoint (tweet, hidePopup) {
     factor -= 0.1;
 
     return (factor <= 1)
-
   });
-
 
   tweet.created_human = moment(tweet.created_at).format(time_fmt)
 

@@ -46,7 +46,10 @@ h1 {
     }
 
     .tweet-body {
-
+        a {
+            text-decoration: none;
+            color: #333;
+        }
     }
 
     .tweet-footer {
