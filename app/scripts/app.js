@@ -14,14 +14,14 @@ var L = require('leaflet');
 
 L.Icon.Default.imagePath = '/images/';
 
-var url = "";// "http://localhost:3080";
+var url = "http://london.feels.website";
 
 this.socket = io(url);
 
 var avgFormat = d3.format(".2f");
 var color = d3.scale.linear()
    .domain([-11,11])  // min/max of data
-   .range(["rgb(250, 20, 100)", "rgb(30, 120, 250)"])
+   .range(["rgb(253,88,6)", "rgb(44,163,219)"])
    .interpolate(d3.interpolateHcl);
 
 

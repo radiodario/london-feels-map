@@ -32,6 +32,8 @@ h1 {
                 float: left;
                 margin-top: 3px;
                 margin-left: -58px;
+                width: 48px;
+                height: 48px;
             }
 
             span.username {
@@ -85,6 +87,38 @@ h1 {
     padding: 5px;
     background-color: #333;
     color: white;
+
+    .item {
+        display: inline-block;
+        margin-right: 10px;
+        padding-right: 10px;
+        border-right: 1px solid gray;
+    }
+
+    ul.nav {
+        list-syle-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: inline-block;
+            margin-left: 5px;
+
+            &:first-child {
+                margin-left: 0px;
+                margin-right: 10px;
+            }
+
+            a {
+                color: white;
+                text-decoration: none;
+                &:hover {
+                    color: rgb(209, 111, 214);
+                }
+            }
+        }
+
+    }
 
 }
 
